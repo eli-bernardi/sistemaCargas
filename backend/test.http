@@ -1,0 +1,108 @@
+### Rotas de teste (extensão REST Client do VS Code). Rode antes: npm run sync && npm run seed
+
+### 1. Login com senha errada (401)
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{ "email": "admin@logistica.com", "senha": "errada" }
+
+### 2. Login válido (guarda o token)
+# @name loginReq
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{ "email": "admin@logistica.com", "senha": "123456" }
+
+### 3. Rota privada sem token (401)
+GET http://localhost:3000/motoristas
+
+### 4. Cadastrar funcionário
+POST http://localhost:3000/funcionario
+Content-Type: application/json
+Authorization: {{loginReq.response.body.token}}
+
+{ "nome": "Novo Funcionário", "email": "novo@logistica.com", "senha": "123456" }
+
+### 5. Cadastrar motorista
+POST http://localhost:3000/motorista
+Content-Type: application/json
+Authorization: {{loginReq.response.body.token}}
+
+{ "nome": "Pedro Santos", "cnh": "45678901234", "cpf": "44455566677", "telefone": "48999990004" }
+
+### 6. Cadastrar motorista com CPF inválido (400)
+POST http://localhost:3000/motorista
+Content-Type: application/json
+Authorization: {{loginReq.response.body.token}}
+
+{ "nome": "Teste", "cnh": "45678901234", "cpf": "123", "telefone": "48999990004" }
+
+### 7. Listar motoristas (CNH/CPF descriptografados)
+GET http://localhost:3000/motoristas
+Authorization: {{loginReq.response.body.token}}
+
+### 8. Buscar motorista por nome
+GET http://localhost:3000/motoristas?nome=ana
+Authorization: {{loginReq.response.body.token}}
+
+### 9. Consultar motorista por código
+GET http://localhost:3000/motorista/1
+Authorization: {{loginReq.response.body.token}}
+
+### 10. Atualizar motorista
+PUT http://localhost:3000/motorista/1
+Content-Type: application/json
+Authorization: {{loginReq.response.body.token}}
+
+{ "nome": "João Silva Jr.", "cnh": "12345678901", "cpf": "11122233344", "telefone": "48911112222" }
+
+### 11. Excluir motorista com carga (409)
+DELETE http://localhost:3000/motorista/1
+Authorization: {{loginReq.response.body.token}}
+
+### 12. Cadastrar carga
+POST http://localhost:3000/carga
+Content-Type: application/json
+Authorization: {{loginReq.response.body.token}}
+
+{ "descricao": "Móveis", "peso": 300, "volume": 5.5, "codigoRastreio": 100004, "idMotorista": 1 }
+
+### 13. Cadastrar carga com motorista inexistente (404)
+POST http://localhost:3000/carga
+Content-Type: application/json
+Authorization: {{loginReq.response.body.token}}
+
+{ "descricao": "Móveis", "peso": 300, "volume": 5.5, "codigoRastreio": 100005, "idMotorista": 999 }
+
+### 14. Listar cargas
+GET http://localhost:3000/cargas
+Authorization: {{loginReq.response.body.token}}
+
+### 15. Cadastrar entrega
+POST http://localhost:3000/entrega
+Content-Type: application/json
+Authorization: {{loginReq.response.body.token}}
+
+{ "cidadeDestino": "Blumenau", "status": "TRANSITO", "dataHora": "2026-10-30T09:00", "idCarga": 1 }
+
+### 16. Atualizar status da entrega
+PUT http://localhost:3000/entrega/2
+Content-Type: application/json
+Authorization: {{loginReq.response.body.token}}
+
+{ "status": "ENTREGUE" }
+
+### 17. Atualizar entrega inexistente (404)
+PUT http://localhost:3000/entrega/999
+Content-Type: application/json
+Authorization: {{loginReq.response.body.token}}
+
+{ "status": "ENTREGUE" }
+
+### 18. Listar entregas ordenadas por data (crescente)
+GET http://localhost:3000/entregas?ordem=asc
+Authorization: {{loginReq.response.body.token}}
+
+### 19. Listar entregas ordenadas por data (decrescente) apenas TRANSITO
+GET http://localhost:3000/entregas?ordem=desc&status=TRANSITO
+Authorization: {{loginReq.response.body.token}}

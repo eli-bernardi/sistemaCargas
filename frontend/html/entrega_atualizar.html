@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Status da Entrega - Logística Express</title>
+    <script src="../js/menu.js" defer></script>
+    <script src="../js/entrega_atualizar.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav aria-label="Navegação principal">
+            <a href="../index.html">Home</a>&emsp;
+            <span>Funcionário: <strong id="funcionario"></strong></span>&emsp;
+            <a href="#" id="btn_logout">Logout</a>
+            <br><br>
+            <b>Motorista:</b>
+            <a href="../html/motorista_cadastrar.html">Cadastrar</a>
+            <a href="../html/motorista_listar.html">Listar</a>
+            <a href="../html/motorista_buscar.html">Buscar por nome</a>
+            <a href="../html/motorista_atualizar.html">Atualizar</a>
+            <a href="../html/motorista_apagar.html">Excluir</a>
+            <br>
+            <b>Carga:</b>
+            <a href="../html/carga_cadastrar.html">Cadastrar</a>
+            <a href="../html/carga_listar.html">Listar</a>
+            <br>
+            <b>Entrega:</b>
+            <a href="../html/entrega_cadastrar.html">Cadastrar</a>
+            <a href="../html/entrega_atualizar.html">Atualizar status</a>
+            <a href="../html/entrega_listar.html">Listar</a>
+        </nav>
+        <hr>
+    </header>
+    <main>
+        <h1>Atualizar Status da Entrega</h1>
+        <form>
+            <label for="codigo">Código da entrega</label><br>
+            <input type="number" min="1" id="codigo" required><br><br>
+            <label for="status">Status</label><br>
+            <select id="status" required>
+                <option value="TRANSITO">TRANSITO</option>
+                <option value="ENTREGUE">ENTREGUE</option>
+            </select><br><br>
+            <button id="btn_atualizar">Atualizar</button>
+        </form>
+        <div id="resposta"></div>
+    </main>
+</body>
+</html>

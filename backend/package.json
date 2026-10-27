@@ -1,0 +1,18 @@
+{
+  "name": "sistema-cargas-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "sync": "node sync.js",
+    "seed": "node seed.js",
+    "start": "node index.js",
+    "test": "node --test test/api.test.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "crypto-js": "^4.2.0",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.0",
+    "sequelize": "^6.37.7"
+  }
+}
