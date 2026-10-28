@@ -1,7 +1,6 @@
 const Entrega = require('../model/Entrega')
 const Carga = require('../model/Carga')
 
-const STATUS = ['ENTREGUE', 'TRANSITO']
 
 const cadastrar = async (req, res) => {
     const { cidadeDestino, status, dataHora, idCarga } = req.body

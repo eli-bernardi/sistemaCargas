@@ -1,6 +1,5 @@
-// Recria as tabelas do db_logistica (CUIDADO: apaga os dados existentes)
 const db = require('./db/conn')
-require('./model/rel')
+const { Carga, Entrega, Funcionario, Motorista } = require('./model/rel')
 
 async function syncDataBase() {
     try {

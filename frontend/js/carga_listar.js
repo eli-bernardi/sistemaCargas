@@ -1,13 +1,69 @@
+const token = localStorage.getItem('token')
+if (!token) {
+    location.href = '../index'
+}
+
 const btn_listar = document.getElementById('btn_listar')
+const resposta = document.getElementById('resposta')
 
 btn_listar.addEventListener('click', async (e) => {
     e.preventDefault()
-    const { dados } = await api('GET', '/cargas')
-    document.getElementById('lista').innerHTML = tabela(
-        ['Código', 'Descrição', 'Peso (kg)', 'Volume (m³)', 'Rastreio', 'Motorista'],
-        dados.map(c => [
-            c.codCarga, c.descricao, c.peso, c.volume, c.codigoRastreio,
-            c.motorista ? c.motorista.codMotorista + ' - ' + c.motorista.nome : c.idMotorista
-        ])
-    )
+
+    fetch(`http://localhost:3000/carga/listar`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(valores)
+    })
+        .then(res => {
+            if (!res.ok) {
+                localStorage.clear()
+                alert('Faça login novamente, tempo expirado!')
+                location.href = '../index.html'
+                throw new Error('Sessão expirada')
+            }
+            return res.json()
+        })
+        .then(dados => {
+            console.log(dados)
+            resposta.innerHTML = ''
+            resposta.innerHTML += `
+        <table>
+            ${criarThead()}
+            ${criarTbody(dados)}
+        </table>
+    `
+        })
+        .catch((err) => {
+            console.error('Erro ao listar os dados', err)
+            resposta.innerHTML = '<p>Erro ao conectar com o servidor.</p>'
+        })
 })
+
+function criarTbody(dados) {
+    let corpo = '<tbody>'
+    dados.forEach(el => {
+        corpo += `<tr>`
+        corpo += `<td>${el.descricao}</td>`
+        corpo += `<td>${el.peso}</td>`
+        corpo += `<td>${el.volume}</td>`
+        corpo += `<td>${el.codigoRastreio}</td>`
+        corpo += `<td>${el.idMotorista}</td>`
+        corpo += `</tr>`
+    })
+    corpo += `</tbody>`
+    return corpo
+}
+
+function criarThead() {
+    return `
+    <thead>
+        <tr>
+            <th>Descrição:/th>
+            <th>Peso:</th>
+            <th>Volume:</th>
+            <th>Codigo do Rastreio:</th>
+            <th>ID do Motorista:</th>
+        </tr>
+    </thead>
+`
+}

@@ -1,32 +1,44 @@
-const btn_carregar = document.getElementById('btn_carregar')
+const token = localStorage.getItem('token')
+if (!token) {
+    location.href = '../index'
+}
+
 const btn_atualizar = document.getElementById('btn_atualizar')
+const resposta = document.getElementById('resposta')
 
 btn_carregar.addEventListener('click', async (e) => {
     e.preventDefault()
-    const codigo = document.getElementById('codigo').value
-    if (!codigo) return mostrar('Informe o código do motorista!')
 
-    const { ok, dados } = await api('GET', '/motorista/' + codigo)
-    if (!ok) return mostrar(dados.message)
 
-    document.getElementById('nome').value = dados.nome
-    document.getElementById('cnh').value = dados.cnh
-    document.getElementById('cpf').value = dados.cpf
-    document.getElementById('telefone').value = dados.telefone
-    mostrar('Dados carregados. Altere e clique em Atualizar.')
-})
+    const id = Number(document.getElementById('id').value)
 
-btn_atualizar.addEventListener('click', async (e) => {
-    e.preventDefault()
-    const codigo = document.getElementById('codigo').value
-    if (!codigo) return mostrar('Informe o código do motorista!')
     const valores = {
+        id: document.getElementById('id').value,
         nome: document.getElementById('nome').value,
         cnh: document.getElementById('cnh').value,
         cpf: document.getElementById('cpf').value,
-        telefone: document.getElementById('telefone').value
+        telefone: document.getElementById('telefone').value,
     }
-
-    const { dados } = await api('PUT', '/motorista/' + codigo, valores)
-    mostrar(dados.message)
+    fetch(`http://localhost:3000/motorista/atualizar`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(valores)
+    })
+        .then(res => {
+            if (!res.ok) {
+                localStorage.clear()
+                alert('Faça login novamente, tempo expirado!')
+                location.href = '../index.html'
+                throw new Error('Sessão expirada')
+            }
+            return res.json()
+        })
+        .then(dados => {
+            resposta.innerHTML = `<p>${dados.message}</p>`
+            document.querySelector('form').reset()
+        })
+        .catch(err => {
+            console.error('Erro ao atualizar cliente:', err)
+            resposta.innerHTML = '<p>Erro ao tentar conectar com o servidor.</p>'
+        })
 })

@@ -1,18 +1,67 @@
+const token = localStorage.getItem('token')
+if (!token) {
+    location.href = '../index'
+}
+
 const btn_listar = document.getElementById('btn_listar')
+const resposta = document.getElementById('resposta')
 
-function montarTabela(dados) {
-    return tabela(
-        ['Código', 'Nome', 'CNH', 'CPF', 'Telefone'],
-        dados.map(m => [m.codMotorista, m.nome, m.cnh, m.cpf, m.telefone])
-    )
-}
-
-async function listar() {
-    const { dados } = await api('GET', '/motoristas')
-    document.getElementById('lista').innerHTML = montarTabela(dados)
-}
-
-btn_listar.addEventListener('click', (e) => {
+btn_listar.addEventListener('click', async (e) => {
     e.preventDefault()
-    listar()
+
+    fetch(`http://localhost:3000/motorista/listar`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(valores)
+    })
+        .then(res => {
+            if (!res.ok) {
+                localStorage.clear()
+                alert('Faça login novamente, tempo expirado!')
+                location.href = '../index.html'
+                throw new Error('Sessão expirada')
+            }
+            return res.json()
+        })
+        .then(dados => {
+            console.log(dados)
+            resposta.innerHTML = ''
+            resposta.innerHTML += `
+        <table>
+            ${criarThead()}
+            ${criarTbody(dados)}
+        </table>
+    `
+        })
+        .catch((err) => {
+            console.error('Erro ao listar os dados', err)
+            resposta.innerHTML = '<p>Erro ao conectar com o servidor.</p>'
+        })
 })
+
+function criarTbody(dados) {
+    let corpo = '<tbody>'
+    dados.forEach(el => {
+        corpo += `<tr>`
+        corpo += `<td>${el.nome}</td>`
+        corpo += `<td>${el.cnh}</td>`
+        corpo += `<td>${el.cpf}</td>`
+        corpo += `<td>${el.telefone}</td>`
+        corpo += `</tr>`
+    })
+    corpo += `</tbody>`
+    return corpo
+}
+
+function criarThead() {
+    return `
+    <thead>
+        <tr>
+            <th>Nome:/th>
+            <th>CNH:</th>
+            <th>CPF:</th>
+            <th>Telefone:</th>
+        </tr>
+    </thead>
+`
+}

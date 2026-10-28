@@ -1,10 +1,41 @@
+const token = localStorage.getItem('token')
+if (!token) {
+    location.href = '../index'
+}
+
 const btn_atualizar = document.getElementById('btn_atualizar')
+const resposta = document.getElementById('resposta')
 
-btn_atualizar.addEventListener('click', async (e) => {
+btn_carregar.addEventListener('click', async (e) => {
     e.preventDefault()
-    const codigo = document.getElementById('codigo').value
-    if (!codigo) return mostrar('Informe o código da entrega!')
 
-    const { dados } = await api('PUT', '/entrega/' + codigo, { status: document.getElementById('status').value })
-    mostrar(dados.message)
+
+    const id = Number(document.getElementById('id').value)
+
+    const valores = {
+        codEntrega: document.getElementById('codEntrega').value,
+        status: document.getElementById('status').value,
+    }
+    fetch(`http://localhost:3000/entrega/atualizar`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(valores)
+    })
+        .then(res => {
+            if (!res.ok) {
+                localStorage.clear()
+                alert('Faça login novamente, tempo expirado!')
+                location.href = '../index.html'
+                throw new Error('Sessão expirada')
+            }
+            return res.json()
+        })
+        .then(dados => {
+            resposta.innerHTML = `<p>${dados.message}</p>`
+            document.querySelector('form').reset()
+        })
+        .catch(err => {
+            console.error('Erro ao atualizar cliente:', err)
+            resposta.innerHTML = '<p>Erro ao tentar conectar com o servidor.</p>'
+        })
 })

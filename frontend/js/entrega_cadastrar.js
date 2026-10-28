@@ -1,25 +1,36 @@
-const btn_cadastrar = document.getElementById('btn_cadastrar')
-
-// Carrega as cargas no select
-async function carregarCargas() {
-    const { dados } = await api('GET', '/cargas')
-    document.getElementById('idCarga').innerHTML =
-        '<option value="">Selecione...</option>' +
-        dados.map(c => '<option value="' + c.codCarga + '">' + esc(c.codCarga + ' - ' + c.descricao + ' (rastreio ' + c.codigoRastreio + ')') + '</option>').join('')
+const token = localStorage.getItem('token')
+if (!token) {
+    location.href = '../index'
 }
+
+const btn_cadastrar = document.getElementById('btn_cadastrar')
+const resposta = document.getElementById('resposta')
+
 
 btn_cadastrar.addEventListener('click', async (e) => {
     e.preventDefault()
+
     const valores = {
         idCarga: document.getElementById('idCarga').value,
         cidadeDestino: document.getElementById('cidadeDestino').value,
         status: document.getElementById('status').value,
-        dataHora: document.getElementById('dataHora').value
+        data: document.getElementById('data').value,
+        hora: document.getElementById('hora').value,
+        idMotorista: document.getElementById('idMotorista').value
     }
 
-    const { ok, dados } = await api('POST', '/entrega', valores)
-    mostrar(dados.message)
-    if (ok) document.querySelector('form').reset()
+    fetch(`http://localhost:3000/entrega/cadastrar`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(valores)
+    })
+        .then(res => res.json())
+        .then(dados => {
+            resposta.innerHTML = `<p>${dados.message}</p>`
+            document.querySelector('form').reset()
+        })
+        .catch(err => {
+            console.error('Erro ao cadastrar entrega:', err)
+            resposta.innerHTML = '<p>Erro ao tentar conectar com o servidor.</p>'
+        })
 })
-
-carregarCargas()
