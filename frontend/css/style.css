@@ -1,0 +1,477 @@
+/* ============================================
+   RESET E VARIÁVEIS
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --azul-primario: #0a4d8c;
+    --azul-secundario: #1778bc;
+    --azul-claro: #4aa3e0;
+    --azul-neon: #00d4ff;
+    --preto: #0a0e14;
+    --cinza-escuro: #1a1f2e;
+    --branco: #ffffff;
+    --sombra: rgba(0, 0, 0, 0.3);
+    --sombra-forte: rgba(0, 0, 0, 0.6);
+    --glass: rgba(255, 255, 255, 0.1);
+    --glass-borda: rgba(255, 255, 255, 0.2);
+    --transicao: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   BODY E FUNDO
+   ============================================ */
+body {
+    font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+    background: linear-gradient(135deg, #0a1929 0%, #0a4d8c 50%, #1778bc 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding: 20px 16px;
+    color: var(--branco);
+    line-height: 1.6;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Efeito de partículas/brilho no fundo */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(74, 163, 224, 0.15) 0%, transparent 50%);
+    animation: flutuar 20s ease-in-out infinite;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes flutuar {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(-5%, 5%) rotate(5deg); }
+}
+
+/* ============================================
+   NAVEGAÇÃO
+   ============================================ */
+header {
+    background: rgba(10, 25, 41, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-borda);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 32px var(--sombra);
+    animation: deslizarBaixo 0.6s ease-out;
+}
+
+@keyframes deslizarBaixo {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+nav {
+    text-align: center;
+    padding: 8px 0;
+}
+
+nav a {
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--branco);
+    padding: 10px 18px;
+    display: inline-block;
+    border-radius: 12px;
+    position: relative;
+    transition: var(--transicao);
+    letter-spacing: 0.3px;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--azul-neon);
+    transition: var(--transicao);
+    transform: translateX(-50%);
+    box-shadow: 0 0 8px var(--azul-neon);
+}
+
+nav a:hover {
+    color: var(--azul-neon);
+    background: rgba(0, 212, 255, 0.1);
+    transform: translateY(-2px);
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+}
+
+nav a:hover::after {
+    width: 60%;
+}
+
+.titulo_menu {
+    color: var(--azul-neon);
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 0 8px;
+    text-shadow: 0 0 12px rgba(0, 212, 255, 0.5);
+    display: inline-block;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--glass-borda), transparent);
+    margin: 8px 0;
+}
+
+/* ============================================
+   MAIN E TÍTULOS
+   ============================================ */
+main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 30px;
+    background: rgba(10, 25, 41, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-borda);
+    border-radius: 24px;
+    box-shadow: 0 12px 48px var(--sombra-forte);
+    text-align: center;
+    animation: aparecer 0.8s ease-out;
+}
+
+@keyframes aparecer {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--branco), var(--azul-neon));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+}
+
+h2 {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 20px;
+}
+
+/* ============================================
+   FORMULÁRIOS
+   ============================================ */
+form {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.5px;
+    text-align: left;
+    width: 100%;
+    max-width: 320px;
+    margin-top: 12px;
+}
+
+input, select, textarea {
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: var(--branco);
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    width: 100%;
+    max-width: 320px;
+    outline: none;
+    transition: var(--transicao);
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--azul-neon);
+    background: rgba(0, 212, 255, 0.08);
+    box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.15),
+                0 0 20px rgba(0, 212, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Remove as setinhas do input number */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* Corrige o ícone do calendário/hora */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+    opacity: 0.8;
+    transition: var(--transicao);
+}
+input[type="date"]::-webkit-calendar-picker-indicator:hover,
+input[type="time"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* ============================================
+   BOTÕES
+   ============================================ */
+button {
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--azul-primario), var(--azul-secundario));
+    color: var(--branco);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    width: 100%;
+    max-width: 320px;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transicao);
+    box-shadow: 0 4px 15px rgba(23, 120, 188, 0.4);
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+button:hover {
+    background: linear-gradient(135deg, var(--azul-secundario), var(--azul-claro));
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 212, 255, 0.5);
+    border-color: var(--azul-neon);
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+}
+
+/* ============================================
+   RESPOSTA / MENSAGENS
+   ============================================ */
+.resposta {
+    margin-top: 24px;
+    padding: 16px;
+    font-size: 1rem;
+    color: var(--branco);
+    font-weight: 600;
+    border-radius: 12px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    animation: aparecer 0.4s ease-out;
+}
+
+.resposta:empty {
+    display: none;
+}
+
+/* ============================================
+   TABELAS
+   ============================================ */
+table {
+    margin: 24px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: 'Segoe UI', sans-serif;
+    width: 100%;
+    max-width: 900px;
+    background: rgba(10, 25, 41, 0.6);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px var(--sombra-forte);
+    animation: aparecer 0.5s ease-out;
+}
+
+th {
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--azul-primario), var(--azul-secundario));
+    color: var(--branco);
+    padding: 14px 12px;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--azul-neon);
+}
+
+td {
+    padding: 12px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 0.95rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transicao);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--branco);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+    text-align: center;
+    padding: 24px;
+    margin-top: 40px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+@media (max-width: 768px) {
+    body {
+        padding: 12px 8px;
+    }
+
+    header {
+        padding: 14px 10px;
+        border-radius: 16px;
+    }
+
+    nav a {
+        font-size: 0.85rem;
+        padding: 8px 10px;
+    }
+
+    .titulo_menu {
+        font-size: 0.85rem;
+        display: block;
+        margin: 10px 0;
+    }
+
+    main {
+        padding: 24px 16px;
+        border-radius: 16px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+    }
+
+    input, select, button {
+        max-width: 100%;
+    }
+
+    table {
+        font-size: 0.85rem;
+    }
+
+    th, td {
+        padding: 8px 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    nav a {
+        font-size: 0.8rem;
+        padding: 6px 8px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+/* ============================================
+   SCROLLBAR CUSTOMIZADA
+   ============================================ */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--azul-secundario), var(--azul-neon));
+    border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--azul-neon);
+}
+
+/* ============================================
+   SELEÇÃO DE TEXTO
+   ============================================ */
+::selection {
+    background: rgba(0, 212, 255, 0.4);
+    color: var(--branco);
+}
